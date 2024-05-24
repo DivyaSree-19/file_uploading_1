@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+     <div class="container container-fluid ">
+        <div class="col-md-4 ">
+             <h3 class="page-header text-primary text-center">Upload Files</h3>
+
+             {% if messages %}
+              {% for message in messages %}
+                 {% if message.tags == 'error' %}
+                     <div class="alert alert-danger">
+                        {{message}}
+                     </div>
+                 {% else %}
+            
+                 <div class="alert alert-{{message.tags}}">
+                       {{message}}
+                </div>
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+
+                <form action="{% url 'uploadfile' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>File Name</label>
+                    {{form.file_name}}
+                </div>
+
+                <div class="form-group"><label>File</label>
+                    {{form.file}}
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+ 
+             </form>
+        </div>
+        <div class="col-md-offset-1 col-md-7 ">
+            {% if mydata %}
+            <h3 class="page-header text-primary text-center">View File</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>SNO</th>
+                        <th>FILE NAME</th>
+                        <th>FILE</th>
+                        <th>DELETE</th>
+                    </tr>
+                </thead>  
+                {%for data in mydata %}  
+
+                <tbody>
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{data.file_name}}</td>
+                        <td><a href="{{data.file.url}}">{{data.file}}</a></td>
+                        <td><a href="DeleteFile/{{data.id}}" class="btn btn-danger">Delete</a></td>
+                    </tr>
+
+                </tbody>
+               {% endfor %}
+
+            </table>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
